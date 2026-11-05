@@ -1,0 +1,14 @@
+services:
+  support-desk:
+    build: .
+    image: brightwell-support-desk:1.0.0
+    env_file: .env
+    ports: ["8501:8501"]
+    volumes:
+      - ./logs:/app/logs        # ticket log (tickets.csv) and traces survive restarts
+      - ./.cache:/app/.cache    # embedding cache (only used when RETRIEVER=hybrid)
+    read_only: true
+    tmpfs: ["/tmp"]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    restart: unless-stopped
